@@ -18,10 +18,10 @@ int main() {
 
     struct btrfs_ioctl_fs_info_args fi_args;
 
-    printf("Btrfs filesystem UUID: %llu\n", fi_args.fsid);
-    printf("Btrfs filesystem mad id: %llu\n", fi_args.max_id);
-    printf("Btrfs filesystem node size: %llu\n", fi_args.nodesize);
-    printf("Btrfs filesystem sector size: %llu\n", fi_args.sectorsize);
+    printf("Btrfs UUID: %llu\n", fi_args.fsid);
+    printf("Btrfs max id: %llu\n", fi_args.max_id);
+    printf("Btrfs node size: %llu\n", fi_args.nodesize);
+    printf("Btrfs sector size: %llu\n", fi_args.sectorsize);
 
     close(fd);
     return 0;
