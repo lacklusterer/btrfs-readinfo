@@ -7,9 +7,17 @@
 #include <sys/ioctl.h>
 #include <linux/btrfs.h>
 
-#define BTRFS_DEVICE "/dev/sda2"
+int main(int argc, char *argv[]) {
+    char *BTRFS_DEVICE;
 
-int main() {
+    if (argc != 2) {
+        printf("Usage: %s <device_path>\n", argv[0]);
+        return 1;
+    }
+
+    BTRFS_DEVICE = argv[1];
+    printf("BTRFS device set to: %s\n", BTRFS_DEVICE);
+
     int fd = open(BTRFS_DEVICE, O_RDONLY);
     if (fd < 0) {
         perror("Failed to open device");
