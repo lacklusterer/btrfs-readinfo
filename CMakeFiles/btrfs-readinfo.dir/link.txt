@@ -1,0 +1,1 @@
+gcc "CMakeFiles/btrfs-readinfo.dir/btrfs-readinfo.c.o" -o btrfs-readinfo 

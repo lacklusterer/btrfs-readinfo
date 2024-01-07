@@ -1,0 +1,3 @@
+/home/scev/documents/btrfs-proj/CMakeFiles/btrfs-readinfo.dir
+/home/scev/documents/btrfs-proj/CMakeFiles/edit_cache.dir
+/home/scev/documents/btrfs-proj/CMakeFiles/rebuild_cache.dir

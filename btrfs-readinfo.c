@@ -4,8 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <btrfs/ctree.h>
+#include <btrfs/ioctl.h>
 #include <sys/ioctl.h>
-#include <linux/btrfs.h>
 
 uint64_t getInodeNumber() {
     uint64_t inode_number;
@@ -36,16 +37,16 @@ int main(int argc, char *argv[]) {
     }
 
     struct btrfs_ioctl_fs_info_args fi_args;
-    struct btrfs_ioctl_ino_lookup_args il_args = { .objectid = getInodeNumber() };
+    // struct btrfs_ioctl_ino_lookup_args il_args = { .objectid = getInodeNumber() };
 
     printf("Btrfs UUID: %llu\n", fi_args.fsid);
     printf("Btrfs max id: %llu\n", fi_args.max_id);
     printf("Btrfs node size: %llu\n", fi_args.nodesize);
     printf("Btrfs sector size: %llu\n", fi_args.sectorsize);
 
-    printf("Inode number: %llu\n", il_args.treeid);
-    printf("Objectid: %llu\n", il_args.objectid);
-    printf("Name: %llu\n", il_args.name);
+    // printf("Inode number: %llu\n", il_args.treeid);
+    // printf("Objectid: %llu\n", il_args.objectid);
+    // printf("Name: %llu\n", il_args.name);
 
     close(fd);
     return 0;
