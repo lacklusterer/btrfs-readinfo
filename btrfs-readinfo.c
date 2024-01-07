@@ -1,54 +1,36 @@
-#include <stdio.h>
 #include <fcntl.h>
-#include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <btrfs/ctree.h>
-#include <btrfs/ioctl.h>
 #include <sys/ioctl.h>
-
-uint64_t getInodeNumber() {
-    uint64_t inode_number;
-    printf("Enter the inode number: ");
-    if (scanf("%llu", &inode_number) != 1) {
-        perror("Error reading inode number");
-        exit(EXIT_FAILURE);
-    }
-    return inode_number;
-}
+#include <btrfs/ioctl.h>
 
 int main(int argc, char *argv[]) {
-    char *BTRFS_DEVICE;
-
-    if (argc != 2) {
-        printf("Usage: %s <device_path>\n", argv[0]);
+    if (argc != 3) {
+        fprintf(stderr, "Usage: %s <path> <inode>\n", argv[0]);
         return 1;
     }
 
-    BTRFS_DEVICE = argv[1];
-    printf("BTRFS device set to: %s\n", BTRFS_DEVICE);
+    const char *path = argv[1];
+    __u64 inode = atoll(argv[2]);
 
-    int fd = open(BTRFS_DEVICE, O_RDONLY);
+    int fd = open(path, O_RDONLY);
     if (fd < 0) {
-        perror("Failed to open device");
+        perror("open");
         return 1;
-        exit(EXIT_FAILURE);
     }
 
-    struct btrfs_ioctl_fs_info_args fi_args;
-    // struct btrfs_ioctl_ino_lookup_args il_args = { .objectid = getInodeNumber() };
+    struct btrfs_ioctl_ino_lookup_args args = {
+        .treeid = 0,
+        .objectid = inode,
+    };
 
-    printf("Btrfs UUID: %llu\n", fi_args.fsid);
-    printf("Btrfs max id: %llu\n", fi_args.max_id);
-    printf("Btrfs node size: %llu\n", fi_args.nodesize);
-    printf("Btrfs sector size: %llu\n", fi_args.sectorsize);
+    if (ioctl(fd, BTRFS_IOC_INO_LOOKUP, &args) < 0) {
+        perror("ioctl(BTRFS_IOC_INO_LOOKUP)");
+        return 1;
+    }
 
-    // printf("Inode number: %llu\n", il_args.treeid);
-    // printf("Objectid: %llu\n", il_args.objectid);
-    // printf("Name: %llu\n", il_args.name);
+    printf("name: %s\n", args.name);
 
     close(fd);
     return 0;
 }
-
