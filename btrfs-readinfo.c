@@ -1,8 +1,23 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <sys/ioctl.h>
 #include <btrfs/ioctl.h>
+
+int inode_lookup(int fd, __u64 inode) {
+    struct btrfs_ioctl_ino_lookup_args args = {
+        .treeid = 0,
+        .objectid = inode,
+    };
+
+    if (ioctl(fd, BTRFS_IOC_INO_LOOKUP, &args) < 0) {
+        perror("ioctl(BTRFS_IOC_INO_LOOKUP)");
+        return 1;
+    }
+
+    printf("name: %s\n", args.name);
+}
 
 int main(int argc, char *argv[]) {
     if (argc != 3) {
@@ -19,17 +34,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    struct btrfs_ioctl_ino_lookup_args args = {
-        .treeid = 0,
-        .objectid = inode,
-    };
-
-    if (ioctl(fd, BTRFS_IOC_INO_LOOKUP, &args) < 0) {
-        perror("ioctl(BTRFS_IOC_INO_LOOKUP)");
-        return 1;
-    }
-
-    printf("name: %s\n", args.name);
+    inode_lookup(fd, inode);
 
     close(fd);
     return 0;
